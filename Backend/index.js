@@ -4,6 +4,8 @@ import UserRouter from './routes/user.route.js';
 import productRouter from './routes/product.route.js';
 import cookieParser from 'cookie-parser';
 import cartRouter from './routes/cart.route.js';
+import orderRouter from './routes/order.routes.js';
+import paymentRoutes from './routes/payment.routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,7 +23,8 @@ app.get('/', (req, res) => {
 app.use('/user', UserRouter);
 app.use('/product', productRouter);
 app.use('/cart', cartRouter);
-// app.use('/order', orderRouter);
+app.use('/order', orderRouter);
+app.use('/payment', paymentRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

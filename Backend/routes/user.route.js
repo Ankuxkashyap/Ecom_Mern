@@ -8,6 +8,7 @@ router.post("/rigester",userRigester);
 router.post("/login",userLogin);
 router.get('/profile',authMiddleware,profile);
 
+
 router.get('/', (req, res) => {
     res.send('User Route');
 });
