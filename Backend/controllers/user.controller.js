@@ -26,7 +26,8 @@ export const userRigester = async (req, res) => {
             password: hashedPassword,
         });
         await newUser.save();
-        return res.status(201).json({message: "User registered successfully"});
+        return res.status(201).json({message: "User registered successfully",newUser});
+
 
     }   catch(err){
         return res.status(500).json({message: "Internal server error"});
