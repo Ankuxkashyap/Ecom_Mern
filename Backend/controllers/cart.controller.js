@@ -50,7 +50,7 @@ export const updateCartItem = async (req, res) => {
   const userId = req.user._id;
   const productId = req.params.productId;
   const  {quantity}  = req.body;
-  console.log(quantity);
+  // console.log(quantity);
 
   try {
     const cart = await Cart.findOne({ userId });

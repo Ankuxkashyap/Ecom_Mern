@@ -3,20 +3,21 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 export const useAuthStore = create((set) => ({
-  user: JSON.parse(localStorage.getItem('user')) || null, // Retrieve user from localStorage
-  token: localStorage.getItem('token') || null, // Retrieve token from localStorage
-  isAuthenticated: localStorage.getItem('isAuthenticated') === 'true', // Check if user is authenticated
+  user: JSON.parse(localStorage.getItem('user')) || null,
+  token: localStorage.getItem('token') || null,
+  isAuthenticated: localStorage.getItem('isAuthenticated') === 'true',
   error: null,
-  // Init function to check user and token on page load
+
   init: () => {
-      const token = localStorage.getItem('token');
-      const user = JSON.parse(localStorage.getItem('user'));
-      const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
-      if (token && isAuthenticated && user) {
-          set({ user, token, isAuthenticated }); // Set state from localStorage
-        }
-    },
-    
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+    const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+
+    if (token && user && isAuthenticated) {
+      set({ user, token, isAuthenticated });
+    }
+  },
+
   login: async ({ email, password }) => {
     try {
       const res = await axios.post(
@@ -24,26 +25,19 @@ export const useAuthStore = create((set) => ({
         { email, password },
         { withCredentials: true }
       );
-      set({
-        user: res.data.user,
-        token: res.data.token,
-        isAuthenticated: true,
-        error: null
-      });
+      // console.log('Login response:', res.data);
+      const { user, token } = res.data;
 
-      // Store token, user info, and isAuthenticated flag in localStorage
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(res.data.user));
+      set({ user, token, isAuthenticated: true, error: null });
+
+      localStorage.setItem('user', JSON.stringify(user));
+      localStorage.setItem('token', token);
       localStorage.setItem('isAuthenticated', 'true');
-
-      toast.success('Login successful!');
       return { success: true };
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Login error');
-      return {
-        success: false,
-        message: err.response?.data?.message || 'Login error',
-      };
+      const message = err.response?.data?.message || 'Login error';
+      toast.error(message);
+      return { success: false, message };
     }
   },
 
@@ -53,35 +47,27 @@ export const useAuthStore = create((set) => ({
         'http://localhost:3000/user/rigester',
         { name, email, password }
       );
-      console.log(res);
 
-      set({
-        user: res.data.newUser.name,
-        isAuthenticated: true,
-        error: null,
-      });
+      const newUser = res.data.newUser;
+      const token = res.data.token; 
 
-      // Store token, user info, and isAuthenticated flag in localStorage
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('user', JSON.stringify(res.data.user));
+      set({ user: newUser, token: token || null, isAuthenticated: true, error: null });
+
+      localStorage.setItem('user', JSON.stringify(newUser));
+      if (token) localStorage.setItem('token', token);
       localStorage.setItem('isAuthenticated', 'true');
-      toast.success('Registration successful!');
       return { success: true };
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Registration error');
-      return {
-        success: false,
-        message: err.response?.data?.message || 'Registration error',
-      };
+      const message = err.response?.data?.message || 'Registration error';
+      toast.error(message);
+      return { success: false, message };
     }
   },
 
   logout: () => {
-    // Clear data from store and localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.setItem('isAuthenticated', 'false');
-
     set({ user: null, token: null, isAuthenticated: false });
     toast.success('Logged out successfully!');
   },

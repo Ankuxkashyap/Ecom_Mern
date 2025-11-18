@@ -1,7 +1,6 @@
 import express from 'express';
 import {
   createOrder,
-  getUserOrders,
   getOrderById,
   updateOrderStatus,
   deleteOrder,
@@ -15,7 +14,6 @@ const router = express.Router();
 
 // Authenticated user routes
 router.post('/', authMiddleware, createOrder);
-router.get('/my-orders', authMiddleware, getUserOrders);
 router.get('/:id', authMiddleware, getOrderById);
 
 // Admin-only routes

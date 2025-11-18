@@ -6,25 +6,6 @@ const orderSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
-    products: [
-        {
-            product: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Product",
-                required: true,
-            },
-            quantity: {
-                type: Number,
-                required: true,
-                default: 1,
-            },
-        },
-    ],
-    totalPrice: {
-        type: Number,
-        required: true,
-        default: 0,
-    },
     address: {
         type: String,
         required: true,
@@ -32,15 +13,20 @@ const orderSchema = new mongoose.Schema({
     paymentMethod: {
         type: String,
         required: true,
-        enum: ["Credit Card", "PayPal", "Cash on Delivery"],
+        // enum: ["credit card", "stripe", "cash on delivery"]
     },
     status: {
         type: String,
         required: true,
-        enum: ["Pending", "Shipped", "Delivered", "Cancelled"],
+        enum: ["Pending", "Shipped", "Delivered", "Canceled"],
         default: "Pending",
+    },
+    totalPrice: {
+        type: Number,
+        required: true,
     },
 
 }, { timestamps: true });
+
 const Order = mongoose.model("Order", orderSchema);
 export default Order;

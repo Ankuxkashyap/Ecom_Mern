@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import cartRouter from './routes/cart.route.js';
 import orderRouter from './routes/order.routes.js';
 import paymentRoutes from './routes/payment.routes.js';
+import webhookRouter from './routes/webhook.route.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;

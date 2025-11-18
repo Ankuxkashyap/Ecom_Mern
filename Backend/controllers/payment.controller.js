@@ -1,11 +1,11 @@
-
-import Stripe from 'stripe';
-
 import stripe from '../config/strip.js';
+import Order from '../models/order.model.js';
 
+// Create Checkout Session
 export const createCheckoutSession = async (req, res) => {
   try {
-    const { products } = req.body;
+    const { products, address, totalPrice, paymentMethod } = req.body;
+    const userId = req.user._id; // Ensure auth middleware sets req.user
 
     if (!products || products.length === 0) {
       return res.status(400).json({ error: 'No products provided' });
@@ -13,11 +13,11 @@ export const createCheckoutSession = async (req, res) => {
 
     const line_items = products.map((item) => ({
       price_data: {
-        currency: 'usd',
+        currency: 'inr',
         product_data: {
           name: item.name,
         },
-        unit_amount: item.price * 100, // amount in cents
+        unit_amount: Math.round(item.price * 100), // Stripe accepts integer paise
       },
       quantity: item.quantity,
     }));
@@ -26,8 +26,15 @@ export const createCheckoutSession = async (req, res) => {
       payment_method_types: ['card'],
       line_items,
       mode: 'payment',
-      success_url: 'http://localhost:5173/success',  
+      success_url: 'http://localhost:5173/success',
       cancel_url: 'http://localhost:5173/cancel',
+      metadata: {
+        userId: userId.toString(),
+        address: JSON.stringify(address), // must be string
+        products: JSON.stringify(products),
+        totalPrice: totalPrice.toString(),
+        paymentMethod,
+      },
     });
 
     res.status(200).json({ url: session.url });

@@ -16,7 +16,7 @@ export default function Auth() {
     const result = await register(signupData);
     if (result?.success) {
       toast.success(`Welcome ${signupData.name} 👋`);
-    //   navigate('/');
+      navigate('/');
       console.log(result)
     } else {
       toast.error(result?.message || 'Registration failed ❌');
@@ -29,8 +29,8 @@ export default function Auth() {
     }
     const result = await login(loginData);
     if (result?.success) {
-      toast.success('Login successful 👌');
-    //   navigate('/');
+      toast.success(`Login successful 👌`);
+      navigate('/');
       console.log(result);
     } else {
       toast.error(result?.message || 'Login failed ❌');

@@ -22,7 +22,7 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true,
     }, 
-    dicount:{
+    discount:{
         type: Number,
         default: 0,
     },
