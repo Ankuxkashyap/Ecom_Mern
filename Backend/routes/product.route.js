@@ -1,29 +1,38 @@
 import express from 'express';
 import upload from '../middlewares/upload.js';
 import { isAdmin } from '../middlewares/isAdmin.js';
-import { createProduct,updateProduct,getAllProducts,getNewCollectionProducts,getProductsDiscounted, getProductsByPriceRange,getProductById,searchProducts,getProductsByCategory,deleteProduct } from '../controllers/product.controller.js';
+import {
+  createProduct,
+  updateProduct,
+  getAllProducts,
+  getNewCollectionProducts,
+  getSimilarProducts,
+  getProductsDiscounted,
+  getProductsByPriceRange,
+  getProductById,
+  searchProducts,
+  getProductsByCategory,
+  deleteProduct
+} from '../controllers/product.controller.js';
 import { authMiddleware } from '../middlewares/auth.js';
-import { get } from 'mongoose';
 
 const router = express.Router();
 
-router.post('/',authMiddleware,isAdmin, upload.single('image'),createProduct);
-router.put('/:id',authMiddleware, isAdmin,upload.single('image'), updateProduct); 
-router.delete('/:id',authMiddleware,isAdmin, deleteProduct);
+
+router.post('/', authMiddleware, isAdmin, upload.single('image'), createProduct);
+router.put('/:id', authMiddleware, isAdmin, upload.single('image'), updateProduct);
+router.delete('/:id', authMiddleware, isAdmin, deleteProduct);
+
 
 router.get('/', getAllProducts);
 router.get('/new-collection', getNewCollectionProducts);
+router.get('/discounted-products', getProductsDiscounted);
 router.get('/price-range', getProductsByPriceRange);
 router.get('/search', searchProducts);
-router.get('/discounted-products',getProductsDiscounted); 
-router.get('/:id', getProductById);
 router.get('/category/:category', getProductsByCategory);
+router.get('/similar/:id', getSimilarProducts);
 
+
+router.get('/:id', getProductById);
 
 export default router;
-
-
-
-
-
-

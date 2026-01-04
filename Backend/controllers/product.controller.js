@@ -102,7 +102,8 @@ export const getAllProducts = async (req, res) => {
 export const getProductById = async (req, res) => {
     try {
         const productId = req.params.id;
-        const product = await Product.find(productId);
+        // console.log("Fetching product with ID:", productId);
+        const product = await Product.findById(productId);
         if (!product) {
             return res.status(404).json({ success: false, message: 'Product not found' });
         }
@@ -143,6 +144,25 @@ export const getNewCollectionProducts = async (req, res) => {
         res.status(200).json({ success: true, products });
     }
     catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+        console.error(err);
+    }
+}
+
+export const getSimilarProducts = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ success: false, message: 'Product not found' });
+        }
+        const similarProducts = await Product.find({ 
+            category: product.category,
+            _id: { $ne: productId } 
+        }).limit(5);
+        res.status(200).json({ success: true, similarProducts });
+
+    }catch (err) {
         res.status(500).json({ success: false, message: err.message });
         console.error(err);
     }

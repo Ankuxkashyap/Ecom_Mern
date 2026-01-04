@@ -16,8 +16,8 @@ export const ProductCard = ({ product }) => {
   // console.log("ProductCard", product);
   // console.log("User in ProductCard", user);
   // console.log(user.id)
-  const addToCart = async (productId) => {
-
+  const addToCart = async (productId,e) => {
+      e.stopPropagation();
     if (!user || !user.id) {
       toast.error("Please login to add items to cart.");
       navigate("/auth");
@@ -51,7 +51,9 @@ export const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="bg-gray-200 shadow-sm rounded-xl p-4 w-full hover:shadow-xl transition">
+    <div
+    onClick={() => navigate(`/product/${product._id}`)}
+     className= "bg-gray-200 shadow-sm rounded-xl p-4 w-full hover:shadow-xl transition">
       <img
         src={`${product.image}`}
         alt={product.name}

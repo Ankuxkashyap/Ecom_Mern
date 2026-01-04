@@ -11,6 +11,7 @@ import ProductList from './components/ProductList';
 import AddProducts from './pages/AddProducts';
 import Success from './components/Success';
 import Error from './components/Error';
+import ProductPage from './pages/ProductPage';
 
 function App() {
 
@@ -25,6 +26,7 @@ function App() {
          <Route path="/success" element={<Success />} />
          <Route path="/error" element={<Error />} />
         <Route path="/add-product" element={<AddProducts />} />
+        <Route path="/product/:id" element={<ProductPage />} />
         <Route path='/profile' element={<Profile/>} />
         <Route path='/cart' element={<Cart/>}/>
         <Route path="/auth" element={<AuthForm />}/>

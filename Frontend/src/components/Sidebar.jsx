@@ -65,7 +65,7 @@ const Sidebar = ({ setProducts, setLoading }) => {
   };
 
   return (
-    <div className="w-full p-4 bg-white shadow-sm h-[100vh]  overflow-y-auto">
+    <div className="w-1/4 p-4 bg-white shadow-sm overflow-y-auto">
       <h2 className="font-semibold mb-2">Filter by Category:</h2>
       <select
         value={category}
